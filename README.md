@@ -121,44 +121,44 @@ Features:
 
 supply-chain-risk-analytics-ml-system/
 │
-├── 📂 app/                         # Streamlit application
-│   ├── app.py
+├── app/                         # Streamlit application
+│   └── app.py
 │
-├── 📂 data/                        # Raw & processed datasets
+├── data/                        # Raw & processed datasets
 │   ├── raw/
-│   ├── processed/
+│   └── processed/
 │
-├── 📂 images/                      # Screenshots (Dashboard, App, Results)
+├── images/                      # Screenshots (Dashboard, App, Results)
 │   ├── powerbi_dashboard.png
-│   ├── streamlit_app.png
+│   └── streamlit_app.png
 │
-├── 📂 models/                      # Saved ML models
+├── models/                      # Saved ML models
 │   ├── model.pkl
-│   ├── scaler.pkl
+│   └── scaler.pkl
 │
-├── 📂 notebooks/                   # Jupyter notebooks (EDA, training)
+├── notebooks/                   # Jupyter notebooks (EDA, training)
 │   ├── eda.ipynb
-│   ├── model_training.ipynb
+│   └── model_training.ipynb
 │
-├── 📂 outputs/                     # Predictions & generated outputs
-│   ├── predictions.csv
+├── outputs/                     # Predictions & generated outputs
+│   └── predictions.csv
 │
-├── 📂 powerbi/                     # Power BI dashboard file
-│   ├── dashboard.pbix
+├── powerbi/                     # Power BI dashboard file
+│   └── dashboard.pbix
 │
-├── 📂 reports/                     # Documentation & reports
+├── reports/                     # Documentation & reports
 │   ├── final_report.md
 │   ├── sql_analysis.md
 │   ├── ml_insights.md
 │   ├── eda_insights.md
-│   ├── dashboard_explaination.md
+│   └── dashboard_explaination.md
 │
-├── 📂 sql/                         # PostgreSQL scripts
+├── sql/                         # PostgreSQL scripts
 │   ├── schema.sql
-│   ├── queries.sql
+│   └── queries.sql
 │
-├── 📄 requirements.txt            # Python dependencies
-├── 📄 README.md                   # Main project documentation
+├── requirements.txt             # Python dependencies
+└── README.md                    # Main project documentation
 
 
 ---
