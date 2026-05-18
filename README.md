@@ -151,7 +151,7 @@ supply-chain-risk-analytics-ml-system/
 │   ├── sql_analysis.md
 │   ├── ml_insights.md
 │   ├── eda_insights.md
-│   └── dashboard_explaination.md
+│   └── dashboard_explanation.md
 │
 ├── sql/                         # PostgreSQL scripts
 │   ├── schema.sql
