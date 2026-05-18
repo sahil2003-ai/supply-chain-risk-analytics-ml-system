@@ -119,6 +119,7 @@ Features:
 
 ## 📁 Project Structure
 
+```bash
 supply-chain-risk-analytics-ml-system/
 │
 ├── app/                         # Streamlit application
@@ -159,6 +160,7 @@ supply-chain-risk-analytics-ml-system/
 │
 ├── requirements.txt             # Python dependencies
 └── README.md                    # Main project documentation
+```
 
 
 ---
