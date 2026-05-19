@@ -6,17 +6,27 @@ import streamlit as st
 import pandas as pd
 import joblib
 import plotly.graph_objects as go
+import os   
+
+# =============
+# BASE PATH
+# =============
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model_path = os.path.join(BASE_DIR, "..", "models", "best_model.pkl")
+scaler_path = os.path.join(BASE_DIR, "..", "models", "scaler.pkl")
+data_path = os.path.join(BASE_DIR, "..", "data", "processed", "cleaned_supply_chain.csv")
 
 # ===============================
 # LOAD MODEL
 # ===============================
-model = joblib.load("../models/best_model.pkl")
-scaler = joblib.load("../models/scaler.pkl")
+model = joblib.load(model_path)
+scaler = joblib.load(scaler_path)
 
 # ===============================
 # LOAD TRAIN STRUCTURE
 # ===============================
-df = pd.read_csv("../data/processed/cleaned_supply_chain.csv")
+df = pd.read_csv(data_path)
 
 X = df.drop(columns=['disruption_occurred', 'shipment_id', 'date'], errors='ignore')
 X = pd.get_dummies(X, drop_first=True)
@@ -89,7 +99,6 @@ if mode == "Single Prediction":
         else:
             st.success(f"✅ Low Risk ({probability:.2%})")
 
-        # 📈 Gauge
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=probability * 100,
@@ -121,10 +130,8 @@ else:
         st.write("📊 Uploaded Data Preview:")
         st.dataframe(data.head())
 
-        # Save original for output
         original_data = data.copy()
 
-        # Preprocess
         data = data.drop(columns=['shipment_id', 'date'], errors='ignore')
         data_encoded = pd.get_dummies(data)
         data_encoded = data_encoded.reindex(columns=model_columns, fill_value=0)
@@ -137,14 +144,12 @@ else:
             predictions = model.predict(data_encoded)
             probabilities = model.predict_proba(data_encoded)[:, 1]
 
-        # Add results
         original_data['Prediction'] = ["High Risk" if p == 1 else "Low Risk" for p in predictions]
         original_data['Probability'] = probabilities
 
         st.subheader("📊 Prediction Results")
         st.dataframe(original_data)
 
-        # 📥 Download results
         csv = original_data.to_csv(index=False).encode('utf-8')
 
         st.download_button(
