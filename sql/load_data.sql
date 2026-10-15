@@ -60,6 +60,38 @@ ON CONFLICT (shipment_id) DO UPDATE SET
   lead_time_days = EXCLUDED.lead_time_days,
   disruption_occurred = EXCLUDED.disruption_occurred;
 
+-- Populate/update dimensions after loading the fact rows.
+INSERT INTO dim_date (date, year, month)
+SELECT DISTINCT date, EXTRACT(YEAR FROM date)::INTEGER, EXTRACT(MONTH FROM date)::INTEGER
+FROM fact_shipments
+WHERE date IS NOT NULL
+ON CONFLICT (date) DO UPDATE SET year = EXCLUDED.year, month = EXCLUDED.month;
+
+INSERT INTO dim_transport (transport_mode, transport_category)
+SELECT DISTINCT transport_mode,
+  CASE
+    WHEN transport_mode = 'Air' THEN 'Fast'
+    WHEN transport_mode = 'Sea' THEN 'Slow'
+    WHEN transport_mode = 'Rail' THEN 'Moderate'
+    WHEN transport_mode = 'Road' THEN 'Variable'
+    ELSE 'Other'
+  END
+FROM fact_shipments
+WHERE transport_mode IS NOT NULL
+ON CONFLICT (transport_mode) DO UPDATE SET transport_category = EXCLUDED.transport_category;
+
+INSERT INTO dim_product (product_category)
+SELECT DISTINCT product_category
+FROM fact_shipments
+WHERE product_category IS NOT NULL
+ON CONFLICT (product_category) DO NOTHING;
+
+INSERT INTO dim_weather (weather_condition)
+SELECT DISTINCT weather_condition
+FROM fact_shipments
+WHERE weather_condition IS NOT NULL
+ON CONFLICT (weather_condition) DO NOTHING;
+
 -- Sanity checks: these should match the current raw CSV.
 SELECT
   COUNT(*) AS total_shipments,
