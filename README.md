@@ -1,56 +1,31 @@
 # Supply Chain Risk Analytics ML System
 
-An end-to-end portfolio project combining Python, SQL, machine learning, Streamlit, and Power BI to analyze shipment disruption patterns and explore risk-classification workflows.
+An end-to-end project combining Python, SQL, machine learning, Streamlit, and Power BI to analyze shipment disruption patterns and explore risk-classification workflows.
 
-![Status](https://img.shields.io/badge/Status-Documented-yellow)
+![Python](https://img.shields.io/badge/Python-Analytics-blue) ![SQL](https://img.shields.io/badge/SQL-Analytics-336791) ![Streamlit](https://img.shields.io/badge/App-Streamlit-FF4B4B) ![Power%20BI](https://img.shields.io/badge/BI-Power%20BI-F2C811)
 
-## 📌 Table of Contents
+## Contents
+- [Overview](#overview)
+- [Business Questions](#business-questions)
+- [Dataset](#dataset)
+- [Workflow and Architecture](#workflow-and-architecture)
+- [Results and Metrics](#results-and-metrics)
+- [Screenshots](#screenshots)
+- [Technology Stack](#technology-stack)
+- [Repository Structure](#repository-structure)
+- [Run the Project](#run-the-project)
+- [Limitations and Next Steps](#limitations-and-next-steps)
 
-- [Overview](#-overview)
-- [Problem Statement](#-problem-statement)
-- [Objectives](#-objectives)
-- [Features](#-features)
-- [Dataset](#-dataset)
-- [Tech Stack](#-tech-stack)
-- [Project Workflow](#-project-workflow)
-- [Repository Structure](#-repository-structure)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Results and Insights](#-results-and-insights)
-- [Screenshots](#-screenshots)
-- [Challenges and Solutions](#-challenges-and-solutions)
-- [Limitations](#-limitations)
-- [Future Improvements](#-future-improvements)
-- [What I Learned](#-what-i-learned)
-- [Author](#-author)
-- [License](#-license)
+## Overview
+This project brings together data cleaning, exploratory analysis, SQL, risk-classification experiments, a Streamlit prediction interface, and a Power BI report. It is designed to explore shipment disruption signals and support risk review.
 
-## 📖 Overview
+## Business Questions
+- How common are disruption labels in the available dataset?
+- How do shipment and transport attributes vary across records?
+- Which features are associated with the disruption label?
+- Can a classification workflow provide a useful signal beyond a simple baseline?
 
-An end-to-end portfolio project combining Python, SQL, machine learning, Streamlit, and Power BI to analyze shipment disruption patterns and explore risk-classification workflows.
-
-## 🎯 Problem Statement
-
-The project addresses a data-analysis or modeling question using the dataset and implementation available in this repository. The aim is to produce transparent, reproducible evidence rather than unsupported performance claims.
-
-## 🎯 Objectives
-
-- Understand the data and define the target or business question.
-- Document data preparation, feature engineering, and analysis/modeling steps.
-- Report available metrics with their evidence and validation status.
-- Make the workflow reproducible and explain limitations.
-
-## ✨ Features
-
-1. Profile source data and validate date formats, missing values, and label balance.
-2. Apply the cleaning and feature-engineering workflow in the notebooks.
-3. Load/query the data using the SQL scripts.
-4. Review the EDA, then confirm the ML target and the time at which each predictor would be available.
-5. Evaluate models on a held-out set with an appropriate baseline.
-6. Use the Streamlit app for single/bulk predictions and compare Power BI measures with validated data totals.
-
-## 📂 Dataset
-
+## Dataset
 Recalculated from `data/raw/global_supply_chain_risk_dataset.csv`:
 
 | Metric | Result |
@@ -60,107 +35,76 @@ Recalculated from `data/raw/global_supply_chain_risk_dataset.csv`:
 | Missing cells | 0 |
 | Disruption-labeled records | 3,063 |
 | Overall disruption-label rate | 61.26% |
-| Date coverage in the source records | 2024–2025 |
+| Source date coverage | 2024–2025 |
 
 Fields include date, origin/destination ports, transport mode, product category, distance, shipment weight, fuel-price index, geopolitical-risk score, weather, carrier reliability, lead time, and `Disruption_Occurred`.
 
-## 🛠️ Tech Stack
-
-List only the libraries and tools directly evidenced in source files and dependency manifests.
-
-## 🔄 Project Workflow
-
+## Workflow and Architecture
 1. Profile source data and validate date formats, missing values, and label balance.
-2. Apply the cleaning and feature-engineering workflow in the notebooks.
-3. Load/query the data using the SQL scripts.
-4. Review the EDA, then confirm the ML target and the time at which each predictor would be available.
-5. Evaluate models on a held-out set with an appropriate baseline.
-6. Use the Streamlit app for single/bulk predictions and compare Power BI measures with validated data totals.
+2. Clean and engineer features using the notebooks.
+3. Load/query data using the SQL schema, load, and analysis scripts.
+4. Explore the data and define the classification target.
+5. Train and evaluate models against an appropriate baseline.
+6. Export predictions and review the Streamlit app and Power BI report.
 
-## 🗂️ Repository Structure
+## Results and Metrics
+The source dataset contains 5,000 rows, 14 columns, and no missing cells. There are 3,063 records labeled with a disruption, a label rate of **61.26%**.
 
-- `data/raw/global_supply_chain_risk_dataset.csv`: source shipment records
-- `data/processed/cleaned_supply_chain.csv`: processed data
-- `notebooks/`: data cleaning, EDA, and ML modeling
-- `sql/`: schema, loading, and analytics queries
-- `app/app.py`: Streamlit application
-- `models/`: saved estimator and scaler
-- `outputs/bulk_predictions.csv`: exported predictions
-- `powerbi/Supply_chain_risk.pbix`: dashboard
-- `reports/`: EDA, SQL, ML, dashboard, and final reports
-- `images/`: application/report screenshots
+This label rate describes the supplied dataset; it is not the accuracy of a model or a forecast of real-world disruption probability. Model results should be reported with the evaluation split, class-wise precision/recall/F1, confusion matrix, and baseline comparison from a fresh run.
 
-## ⚙️ Installation
+## Screenshots
+The repository includes app/report images:
 
-1. Create an environment and install `requirements.txt`.
-2. Follow the schema and data-loading scripts in `sql/`.
-3. Run the notebooks in sequence: cleaning, EDA, then modeling.
-4. Validate model performance with a held-out split and compare it with a baseline.
-5. Launch the Streamlit app from the confirmed entry point.
-6. Open the Power BI report and reconcile its KPIs with verified outputs.
-
-## ▶️ Usage
-
-1. Create an environment and install `requirements.txt`.
-2. Follow the schema and data-loading scripts in `sql/`.
-3. Run the notebooks in sequence: cleaning, EDA, then modeling.
-4. Validate model performance with a held-out split and compare it with a baseline.
-5. Launch the Streamlit app from the confirmed entry point.
-6. Open the Power BI report and reconcile its KPIs with verified outputs.
-
-## 📊 Results and Insights
-
-| Segment | Records | Disrupted records | Disruption-label rate |
-|---|---:|---:|---:|
-| Hurricane | 990 | 990 | 100.0% |
-| Storm | 1,002 | 797 | 79.5% |
-| Fog | 1,036 | 498 | 48.1% |
-| Rain | 977 | 410 | 42.0% |
-| Clear | 995 | 368 | 37.0% |
-
-Transport-mode label rates are comparatively similar in this dataset: Air 61.7%, Rail 61.2%, Road 61.0%, and Sea 61.0%. The Textiles category has a 64.9% label rate; Pharmaceuticals 61.1%, Automotive 60.5%, Perishables 60.3%, and Electronics 59.5%.
-
-These are descriptive associations in the supplied dataset, not proof that weather or transport mode independently causes disruptions. The exact pattern—especially a 100% disruption label for all Hurricane records—should be checked against how the dataset and target were generated.
-
-## 🖼️ Screenshots
-
-Add genuine charts or app screenshots stored in the repository. Do not use mock screenshots or claim that a file exists unless verified.
-
-## 🧩 Challenges and Solutions
-
-| Challenge | Solution |
+| Screenshot | Preview |
 |---|---|
-| Saved outputs may not match current data or dependencies | Rerun the workflow and compare fresh outputs. |
-| High model scores can be caused by leakage or an unsuitable split | Validate feature timing, target construction, split strategy, and baseline. |
-| Results may be hard to reproduce | Document package versions, input paths, and random seeds where applicable. |
+| App | ![Streamlit app](images/app.png) |
+| App detail | ![Streamlit app detail](images/app2.png) |
+| Dashboard page 1 | ![Dashboard page 1](images/page1.png) |
+| Dashboard page 2 | ![Dashboard page 2](images/page2.png) |
+| Dashboard page 3 | ![Dashboard page 3](images/page3.png) |
+| Dashboard page 4 | ![Dashboard page 4](images/page4.png) |
 
-## ⚠️ Limitations
+## Technology Stack
+- Python, pandas, and ML libraries used by the notebooks
+- SQL schema, data loading, and analytical queries
+- Streamlit application
+- Power BI report
+- CSV data and exported predictions
 
-- The raw dataset has no missing cells in the supplied CSV, but target-generation methodology and the extreme weather-label relationship need documentation.
-- Saved model scores have not been independently reproduced in this review.
-- Historical relationships are descriptive and do not establish causality.
-- Document the dataset source/license and verify the processed row count before asserting end-to-end data-preparation integrity.
+## Repository Structure
+```text
+supply-chain-risk-analytics-ml-system/
+├── app/app.py
+├── data/raw/global_supply_chain_risk_dataset.csv
+├── data/processed/cleaned_supply_chain.csv
+├── images/
+├── models/best_model.pkl
+├── models/scaler.pkl
+├── notebooks/
+├── outputs/bulk_predictions.csv
+├── powerbi/Supply_chain_risk.pbix
+├── reports/
+├── sql/
+└── README.md
+```
 
-## 🚀 Future Improvements
+## Run the Project
+1. Create a Python environment and install the repository's dependency file.
+2. Follow the schema and data-loading scripts in `sql/`.
+3. Run the notebooks in order: cleaning, EDA, then modeling.
+4. Validate model performance on a held-out set and compare with a baseline.
+5. Launch the Streamlit app from its `app/` directory after confirming model paths.
+6. Open the Power BI report and reconcile its measures with verified outputs.
 
-- [ ] Rerun the pipeline and verify all saved metrics.
-- [ ] Document dataset provenance and data dictionary.
-- [ ] Add genuine output screenshots and a reproducible model comparison.
+## Limitations and Next Steps
+- Validate model metrics and avoid leakage from predictors unavailable at prediction time.
+- Document source-data provenance and licensing.
+- Confirm app preprocessing matches the model's training features.
+- Reconcile SQL, notebook, Streamlit, and Power BI results.
+- Record dependency versions and add repeatable setup instructions.
 
-## 📚 What I Learned
+## Skills Demonstrated
+Data cleaning, EDA, SQL analytics, classification workflow, model evaluation, Streamlit, Power BI, and results communication.
 
-- Building a reproducible data science workflow.
-- Choosing and interpreting task-appropriate evaluation metrics.
-- Separating descriptive associations from causal claims.
-- Documenting model limitations alongside results.
-
-## 👤 Author
-
-**Sahil Gaikwad**
-
-- GitHub: [sahil2003-ai](https://github.com/sahil2003-ai)
-- LinkedIn: [Sahil Gaikwad](https://www.linkedin.com/in/sahil-gaikwad-a76b7224a/)
-
-## 📄 License
-
-Confirm the repository license and dataset reuse terms before redistribution.
+## Author
+**Sahil Gaikwad** · [GitHub](https://github.com/sahil2003-ai) · [LinkedIn](https://www.linkedin.com/in/sahil-gaikwad-a76b7224a/)
