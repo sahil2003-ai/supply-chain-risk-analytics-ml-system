@@ -114,7 +114,7 @@ Do not run generic commands that do not match the files in this repository. Conf
 
 ## ▶️ Usage
 
-Use the repository's requirements.txt, SQL scripts, notebooks, and app/ entry point; exact commands depend on the checked-in implementation.
+For PostgreSQL, run `sql/Schema.sql` first, then run `sql/load_data.sql` from the repository root with `psql -d YOUR_DATABASE -f sql/load_data.sql`. The loader uses a text staging column for the source date and parses it with `TO_DATE(date_text, 'DD-MM-YYYY')`. Then run the analytical queries in `sql/queries.sql`. The CSV-derived KPI values in this README provide the expected cross-checks.
 
 ## 📊 Results and Insights
 
