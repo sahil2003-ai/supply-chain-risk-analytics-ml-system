@@ -118,7 +118,34 @@ Use the repository's requirements.txt, SQL scripts, notebooks, and app/ entry po
 
 ## 📊 Results and Insights
 
-### Saved notebook model comparison
+### Independently recalculated dataset KPIs
+
+I recalculated these metrics from the current raw CSV (`data/raw/global_supply_chain_risk_dataset.csv`), not just the saved notebook output.
+
+| KPI | Result |
+|---|---:|
+| Shipments | 5,000 |
+| Raw columns | 14 |
+| Missing values in raw columns | 0 |
+| Disruption rate | 61.26% |
+| Average lead time | 19.36 days |
+| Average carrier reliability | 0.754 |
+
+### Segment findings
+
+| Group | Shipments | Disruption rate |
+|---|---:|---:|
+| Hurricane | 990 | 100.00% |
+| Storm | 1,002 | 79.54% |
+| Clear weather | 995 | 36.98% |
+| Textiles | 1,010 | 64.85% |
+| Electronics | 1,016 | 59.55% |
+
+By origin port, Hamburg has a 62.48% disruption rate (597 shipments), while Singapore has 62.27% (599 shipments). Across transport modes, disruption rates are close together: Air 61.74%, Rail 61.18%, Road 61.04%, and Sea 61.05%. Air has the shortest average lead time (1.64 days) and Sea the longest (39.80 days).
+
+The 100% hurricane disruption rate is a strong signal to inspect how the data/labels were generated and whether weather is effectively encoding the target. These are associations in this dataset, not proof that weather alone causes a disruption.
+
+### Saved model evaluation (not independently rerun)
 
 | Metric | Logistic Regression | Random Forest | XGBoost |
 |---|---:|---:|---:|
@@ -128,11 +155,11 @@ Use the repository's requirements.txt, SQL scripts, notebooks, and app/ entry po
 | F1-score | 0.788 | 0.780 | 0.782 |
 | ROC-AUC | 0.827 | 0.810 | 0.821 |
 
-The saved notebook selects **Logistic Regression** by F1-score. Its recorded confusion matrix is `[[252, 135], [127, 486]]` on 1,000 test examples. ROC-AUC is approximately **0.827**; a 0.6 threshold produced a saved F1-score of **0.757**.
+The saved notebook selects Logistic Regression by F1-score. Its recorded confusion matrix is `[[252, 135], [127, 486]]` on 1,000 test examples. These model metrics remain saved notebook results; they have not been independently reproduced in a clean runtime.
 
-The EDA notebook records average carrier reliability of **0.7544** and **285 critical shipments** under the project's rule.
+### SQL status
 
-These are saved notebook outputs, not freshly rerun results. Validate split strategy, class balance, target construction, and whether each feature would be available at prediction time before presenting the metrics as final. Higher recall may be useful when missed disruptions are costly, while false alarms also have operational costs.
+The fact-table schema was updated to include `weather_condition`, which is queried in `sql/queries.sql`. **The SQL workflow has not been executed against a live PostgreSQL instance here.** The raw CSV uses dates in `DD-MM-YYYY` format, so the load process must explicitly parse dates (for example, through a text staging table and `TO_DATE(date_text, 'DD-MM-YYYY')`) rather than relying on the database's default date style.
 
 ## 🖼️ Screenshots
 
@@ -153,10 +180,11 @@ These are saved notebook outputs, not freshly rerun results. Validate split stra
 
 ## ⚠️ Limitations
 
-- Metrics are recorded notebook outputs and have not been independently re-executed in this review.
-- Confirm label balance, split methodology, and feature availability at prediction time.
-- Dataset provenance and redistribution license need documentation.
-- Risk predictions are not guarantees of disruption or prevention.
+- Raw-data KPIs and group rates above were independently recalculated from the repository CSV; the SQL scripts and saved model metrics were not executed/reproduced in PostgreSQL or a clean Python environment.
+- Hurricane has a 100% observed disruption rate in this dataset; investigate possible synthetic label construction or target leakage before treating the pattern as operational evidence.
+- The CSV date format requires explicit parsing during SQL import.
+- Document the original data source and redistribution license.
+- Descriptive group differences do not prove causality.
 
 ## 🚀 Future Improvements
 
