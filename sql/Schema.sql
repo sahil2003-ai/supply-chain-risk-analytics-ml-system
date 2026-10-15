@@ -19,6 +19,9 @@ CREATE TABLE fact_shipments (
     disruption_occurred INT
 );
 
+-- Backward-compatible migration for databases created before weather was added.
+ALTER TABLE fact_shipments ADD COLUMN IF NOT EXISTS weather_condition TEXT;
+
 -- ===============================
 -- Create dimension tables
 -- ===============================
