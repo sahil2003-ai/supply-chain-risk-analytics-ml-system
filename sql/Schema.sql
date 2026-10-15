@@ -9,6 +9,7 @@ CREATE TABLE fact_shipments (
     destination_port TEXT,
     transport_mode TEXT,
     product_category TEXT,
+    weather_condition TEXT,
     distance_km FLOAT,
     weight_mt FLOAT,
     fuel_price_index FLOAT,
