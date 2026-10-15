@@ -48,10 +48,13 @@ Supply-chain teams need to summarize shipment patterns and evaluate whether avai
 
 ## 📂 Dataset
 
-Inspect data/ and sql/ for the source, schema, and whether data is synthetic or externally sourced. Row counts and source are not asserted here.
+The saved cleaning notebook reports **5,000 shipments × 14 raw columns** and **5,000 rows × 19 columns** after adding engineered fields. It reports zero missing values in the raw 14 columns.
 
-- **Privacy and licensing:** Check source terms and avoid publishing personal, sensitive, or restricted data.
-- **Preprocessing:** Follow the actual SQL/notebook/report implementation; do not assume cleaning steps or row counts that have not been verified.
+- **Raw file:** `data/raw/global_supply_chain_risk_dataset.csv`
+- **Processed file:** `data/processed/cleaned_supply_chain.csv`
+- **Target:** `disruption_occurred`
+- **Raw fields:** shipment ID, date, origin/destination ports, transport mode, product category, distance, weight, fuel-price index, geopolitical risk score, weather, carrier reliability, lead time, and disruption label.
+- **Provenance/license:** Document the original data publisher and redistribution terms; repository presence alone does not establish these.
 
 ## 🛠️ Tech Stack
 
@@ -115,13 +118,21 @@ Use the repository's requirements.txt, SQL scripts, notebooks, and app/ entry po
 
 ## 📊 Results and Insights
 
-### Key Findings
+### Saved notebook model comparison
 
-Earlier README metrics require reproduction before use. Add a verified table with split strategy, baseline, precision, recall, F1, and relevant caveats.
+| Metric | Logistic Regression | Random Forest | XGBoost |
+|---|---:|---:|---:|
+| Accuracy | 0.738 | 0.704 | 0.731 |
+| Precision | 0.783 | 0.716 | 0.777 |
+| Recall | 0.793 | 0.856 | 0.786 |
+| F1-score | 0.788 | 0.780 | 0.782 |
+| ROC-AUC | 0.827 | 0.810 | 0.821 |
 
-### Evaluation
+The saved notebook selects **Logistic Regression** by F1-score. Its recorded confusion matrix is `[[252, 135], [127, 486]]` on 1,000 test examples. ROC-AUC is approximately **0.827**; a 0.6 threshold produced a saved F1-score of **0.757**.
 
-For analytics projects, reconcile key totals and document metric definitions. For ML projects, report the baseline, split strategy, relevant metrics, and held-out evaluation results. Do not include unverified scores or business impact claims.
+The EDA notebook records average carrier reliability of **0.7544** and **285 critical shipments** under the project's rule.
+
+These are saved notebook outputs, not freshly rerun results. Validate split strategy, class balance, target construction, and whether each feature would be available at prediction time before presenting the metrics as final. Higher recall may be useful when missed disruptions are costly, while false alarms also have operational costs.
 
 ## 🖼️ Screenshots
 
@@ -142,9 +153,10 @@ For analytics projects, reconcile key totals and document metric definitions. Fo
 
 ## ⚠️ Limitations
 
-- Risk scores are not operational guarantees.
-- Dataset provenance and model metrics must be verified.
-- High scores may reflect data construction or leakage.
+- Metrics are recorded notebook outputs and have not been independently re-executed in this review.
+- Confirm label balance, split methodology, and feature availability at prediction time.
+- Dataset provenance and redistribution license need documentation.
+- Risk predictions are not guarantees of disruption or prevention.
 
 ## 🚀 Future Improvements
 
